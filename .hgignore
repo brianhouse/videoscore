@@ -1,0 +1,13 @@
+syntax: glob
+
+__pycache__
+.DS_Store
+dev
+braid
+housepy
+charts
+cues
+*.concert
+align
+*.mov
+*.zip
