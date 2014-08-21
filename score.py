@@ -3,7 +3,6 @@
 
 import time, pyglet, json, sys
 from housepy import config, log, util
-from housepy.video import VideoPlayer
 
 """
 
@@ -49,21 +48,17 @@ class Cue(object):
         return {'id': self.id, 't': self.t, 'x': self.x, 'y': self.y}
 
 
-if sys.argv < 2:
-    print("[videofile] [[cuefile]]")
-    exit()
-videofile = sys.argv[1]
+videofile = sys.argv[1] if len(sys.argv) > 1 else None
 cuefile = sys.argv[2] if len(sys.argv) > 2 else None
 
-try:
-    video_player = VideoPlayer(videofile)
-except pyglet.media.avbin.AVbinException as e:
-    log.error("Could not load video: %s" % log.exc(e))
-    exit()
+if videofile is None:
+    videofile = raw_input("Videofile: ")
+if cuefile is None:
+    cuefile = raw_input("Cuefile [new]: ")
+if not len(cuefile):
+    cuefile = None
 
-width, height = video_player.get_video_size()
 cues = []
-
 if cuefile is not None:
     try:
         with open(cuefile) as f:
@@ -74,6 +69,15 @@ if cuefile is not None:
         log.info("Could not read cuefile: %s" % cuefile)
         exit()
 
+
+from housepy.video import VideoPlayer
+try:
+    video_player = VideoPlayer(videofile)
+except pyglet.media.avbin.AVbinException as e:
+    log.error("Could not load video: %s" % log.exc(e))
+    exit()
+
+width, height = video_player.get_video_size()
 
 def on_key(data):
     t, key = data
@@ -105,7 +109,15 @@ video_player.add_callback('draw', on_draw)
 
 video_player.play()
 
+if cuefile is None:
+    cuefile = "cues/%s_cues.json" % int(time.time())
+prompt = "Save cuefile [%s]: " % cuefile
+filename = raw_input(prompt)
+if len(filename):
+    cuefile = filename
+
 if len(cues):
     cues.sort(key=lambda cue: cue.t)
-    with open("cues/%s_cues.json" % int(time.time()), 'w') as f:
+    with open(cuefile, 'w') as f:
         f.write(json.dumps([cue.to_dict() for cue in cues], indent=4))
+    log.info("Wrote %s" % cuefile)
