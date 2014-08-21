@@ -72,13 +72,26 @@ except pyglet.media.avbin.AVbinException as e:
 width, height = video_player.get_video_size()
 
 # video event handlers
-def on_key(data):
+quality = None
+
+def on_key_press(data):
+    global quality
     t, key = data
-    cues.append((t, key))
-video_player.add_callback('key', on_key)
+    quality = key
+    log.info("Quality is %s" % quality)
+video_player.add_callback('key', on_key_press)
+
+def on_key_release(data):
+    global quality
+    t, key = data
+    if key == quality:
+        quality = None
+    log.info("Quality is %s" % quality)
+video_player.add_callback('key_release', on_key_release)
 
 def on_click(data):
     t, x, y, modifiers = data
+    print(modifiers)
     x /= float(width)
     y /= float(height)
     # hold down key for a color?
