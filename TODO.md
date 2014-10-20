@@ -4,5 +4,3 @@ OK, so there are continuous changes, there are events with duration, and there a
 
 /
 
-arrow-based frame stepping would be nice
-only activated when paused

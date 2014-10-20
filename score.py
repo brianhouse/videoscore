@@ -94,10 +94,10 @@ video_player.add_callback('key', on_key_press)
 
 def on_click(data):
     t, x, y, modifiers = data
-    print(modifiers)
+    # print(modifiers)
     x /= float(width)
     y /= float(height)
-    if modifiers == 64: # command
+    if modifiers == 64: # command (option is 132, control is 2, shift is 1, fn is 512)
         for cue in cues:
             if cue.hit_test(x, y):                
                 cues.remove(cue)
