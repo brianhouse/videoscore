@@ -4,3 +4,4 @@ OK, so there are continuous changes, there are events with duration, and there a
 
 /
 
+labeling the qualities would be useful. which is something that could happen in curses, maybe.

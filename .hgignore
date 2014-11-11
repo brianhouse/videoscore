@@ -11,3 +11,6 @@ cues
 align
 *.mov
 *.zip
+dist
+build
+*.egg
