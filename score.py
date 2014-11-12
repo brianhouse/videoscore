@@ -51,18 +51,14 @@ class Cue(object):
 
 
 # load files
-if 'video' in config and 'cues' in config:
-    videofile = config['video']
-    cuefile = config['cues']
-else:
-    videofile = sys.argv[1] if len(sys.argv) > 1 else None
-    cuefile = sys.argv[2] if len(sys.argv) > 2 else None
-    if videofile is None:
-        videofile = raw_input("Videofile: ")
-    if cuefile is None:
-        cuefile = raw_input("Cuefile [new]: ")
-    if not len(cuefile):
-        cuefile = None
+videofile = sys.argv[1] if len(sys.argv) > 1 else None
+cuefile = sys.argv[2] if len(sys.argv) > 2 else None
+if videofile is None:
+    videofile = raw_input("Videofile: ")
+if cuefile is None:
+    cuefile = raw_input("Cuefile [new]: ")
+if not len(cuefile):
+    cuefile = None
 
 # read in cues
 cues = []
@@ -105,7 +101,11 @@ def on_click(data):
         for cue in cues:
             if cue.hit_test(x, y):                
                 cues.remove(cue)
-                log.info("Removed cue [%d]" % cue.id)                                        
+                log.info("Removed cue [%d]" % cue.id)        
+    elif modifiers == 132:
+        for cue in cues:
+            if cue.hit_test(x, y):
+                log.info("Cue [%d]: %f (%f, %f) %s" % (cue.id, cue.t, cue.x, cue.y, cue.q))
     else:
         cue = Cue(t, x, y, quality)
         cues.append(cue)
@@ -121,15 +121,12 @@ video_player.add_callback('draw', on_draw)
 video_player.play()
 
 # save cues
-if 'cues' in config:
-    cuefile = config['cues']
-else:
-    if cuefile is None:
-        cuefile = "cues/%s_cues.json" % int(time.time())
-    prompt = "Save cuefile [%s]: " % cuefile
-    filename = raw_input(prompt)
-    if len(filename):
-        cuefile = filename
+if cuefile is None:
+    cuefile = "cues/%s_cues.json" % int(time.time())
+prompt = "Save cuefile [%s]: " % cuefile
+filename = raw_input(prompt)
+if len(filename):
+    cuefile = filename
 if len(cues):
     cues.sort(key=lambda cue: cue.t)
     with open(cuefile, 'w') as f:
