@@ -11,9 +11,10 @@ if len(sys.argv) > 1:
 
 db = crashdb.load("notes.json")
 notes = db['notes']
-db.close(False)
+nts = [note[0] for note in notes]
+db.close()
 
-ctx = animation.Context(1200, 600, background=(0.9, 0.9, 0.9, 1.), fullscreen=False, title="Forty-Eight to Sixteen", smooth=False)
+ctx = animation.Context(1200, 600, background=(0.9, 0.9, 0.9, 1.), fullscreen=False, title="The Patient Conflict", smooth=False)
 
 page_duration = 5.0
 margin = 1.0
@@ -31,7 +32,7 @@ def get_note_name(n):
     return names[i]
 
 ledgers = {'B': 4, 'C': 5, 'Db': 6, 'D': 6, 'Eb': 7, 'E': 7, 'F': 8, 'Gb': 9, 'G': 9, 'Ab': 10, 'A': 10, 'Bb': 11}
-def get_bass_ledger(n):
+def get_ledger(n):
     name = get_note_name(n)
     return ledgers[name]
 
@@ -45,6 +46,7 @@ def message_handler(location, address, data):
     global last_t
     t = data[0]
     if not started:
+        log.info("STARTING")
         started = True
         start_t = time.time()
         last_t = start_t
@@ -71,21 +73,23 @@ def draw_staff():
 def draw_frame(t):
     global note_index
     start_index = note_index
-    while notes[start_index] < (t - margin):
+    while nts[start_index] < (t - margin):
         start_index += 1    
     stop_t = (t - margin) + (page_duration - margin)
     stop_index = start_index + 1
-    while notes[stop_index] <= stop_t:
+    while nts[stop_index] <= stop_t:
         stop_index += 1
+        if stop_index == len(nts):
+            return
+    current_nts = np.array(nts[start_index:stop_index])
     current_notes = np.array(notes[start_index:stop_index])
-    current_note_info = np.array(note_infos[start_index:stop_index])
-    current_notes -= (t - margin)
-    current_notes /= (page_duration - margin)
-    for i, t in enumerate(current_notes):
-        note_info = current_note_info[i]        
-        channel = int(note_info[0])
-        note = int(note_info[1])        
-        vertical = (get_bass_ledger(note) * 0.0625) + 0.0625
+    current_nts -= (t - margin)
+    current_nts /= (page_duration - margin)
+    for i, t in enumerate(current_nts):
+        note = current_notes[i]        
+        channel = int(note[2])
+        note = int(note[1])
+        vertical = (get_ledger(note) * 0.0625) + 0.0625
 
         if CHANNEL is not None and channel != CHANNEL:
             continue
@@ -100,7 +104,9 @@ def draw_frame(t):
             elif channel == 2:
                 color = (0., .6, 0., 1.)
             elif channel == 3:
-                color = (0., 0., .6, 1.)                
+                color = (0., 0., .6, 1.)        
+            elif channel == 4:
+                color = (.6, 0., .6, 1.)
 
         vertical += 0.010
         # vertical += int(str(note_info[4])[-2]) * 0.001

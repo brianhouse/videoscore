@@ -61,9 +61,9 @@ for cue in cues:
     pitch = root + scale[step]
     notes.append((t, pitch, v.channel.value))
 
-db['notes'] = notes
-db.close()
-exit()
+# db['notes'] = notes
+# db.close()
+# exit()
 
 # subprocess.call("open ../vid_raw.mov", shell=True)
 # time.sleep(0.6)
