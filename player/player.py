@@ -26,7 +26,7 @@ chord = None
 v1 = Voice(1, chord=chord)
 v2 = Voice(2, chord=chord)
 v3 = Voice(3, chord=chord)
-v4 = Voice(4, chord=chord)
+# v4 = Voice(4, chord=chord)
 
 # play_at(self, t, step, velocity=None):
 
@@ -100,18 +100,30 @@ for s, feet in enumerate(soldiers):
 
 notes = []
 for cue in cues:
-    if cue['x'] > 0.75:
-        v = v4
-        # continue            ##              turn voices on and off
-    elif cue['x'] > 0.5:
+
+    # if cue['x'] > 0.75:
+    #     v = v4
+    #     # continue            ##              turn voices on and off
+    # elif cue['x'] > 0.5:
+    #     v = v3
+    #     # continue            ##
+    # elif cue['x'] > 0.25:
+    #     v = v2
+    #     # continue            ##
+    # else:
+    #     v = v1
+    #     # continue            ##
+
+    if cue['x'] > 0.66:
         v = v3
-        # continue            ##
-    elif cue['x'] > 0.25:
+        # continue            ##              turn voices on and off
+    elif cue['x'] > 0.33:
         v = v2
         # continue            ##
     else:
         v = v1
         # continue            ##
+
     if cue['q'] not in mapping:
         continue
     t, step, velocity = cue['t'], mapping[cue['q']], ((1.0 - cue['y']) * 0.5) + 0.5
@@ -124,6 +136,7 @@ for cue in cues:
 db = crashdb.load("notes.json")
 db['notes'] = notes
 db.close()
+log.info("Wrote notes.json")
 # exit()
 
 # subprocess.call("open ../vid_raw.mov", shell=True)

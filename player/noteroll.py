@@ -42,12 +42,10 @@ def get_bass_note_name(n):
 
 def get_treble_ledger(n):
     name = get_treble_note_name(n)
-    print(name)
     return treble_ledgers[name]
 
 def get_bass_ledger(n):
     name = get_bass_note_name(n)
-    print(name)
     return bass_ledgers[name]
 
 def message_handler(location, address, data):
@@ -57,12 +55,16 @@ def message_handler(location, address, data):
     global started
     global start_t
     global last_t
+    global note_index
     t = data[0]
+    if int(t) == 0:
+        started = False
     if not started:
         log.info("STARTING")
         started = True
         start_t = time.time()
         last_t = start_t
+        note_index = 0
 osc.Receiver(config['players'][CHANNEL - 1]['port'] if CHANNEL is not None else 39393, message_handler)
 
 def draw():
@@ -87,13 +89,14 @@ def draw_frame(t):
     global note_index
     start_index = note_index
     while nts[start_index] < (t - margin):
-        start_index += 1    
+        start_index += 1        
     stop_t = (t - margin) + (page_duration - margin)
     stop_index = start_index + 1
     while nts[stop_index] <= stop_t:
         stop_index += 1
         if stop_index == len(nts):
             return
+    print(note_index, start_index, stop_index, len(nts))                    
     current_nts = np.array(nts[start_index:stop_index])
     current_notes = np.array(notes[start_index:stop_index])
     current_nts -= (t - margin)
@@ -110,10 +113,10 @@ def draw_frame(t):
         # if channel != 1:
         #     continue
 
-        if channel == 1 or channel == 3:
-            vertical = (get_bass_ledger(note) * 0.0625) + 0.0625
-        else:
+        if channel == 1 or channel == 2:
             vertical = (get_treble_ledger(note) * 0.0625) + 0.0625
+        else:
+            vertical = (get_bass_ledger(note) * 0.0625) + 0.0625
 
 
         # intensity = 1.0 - abs(hitpoint - t)
@@ -122,11 +125,11 @@ def draw_frame(t):
             color = (.3, .3, .3, 1.)
         else:
             if channel == 1:
-                color = (.6, 0., 0., 1.)
+                color = (.6, 0., 0., 1.)    # red
             elif channel == 2:
-                color = (0., .6, 0., 1.)
+                color = (0., .6, 0., 1.)    # green
             elif channel == 3:
-                color = (0., 0., .6, 1.)        
+                color = (0., 0., .6, 1.)    # blue
             elif channel == 4:
                 color = (.6, 0., .6, 1.)
 
