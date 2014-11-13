@@ -8,7 +8,7 @@
 			"architecture" : "x86"
 		}
 ,
-		"rect" : [ 39.0, 72.0, 1235.0, 581.0 ],
+		"rect" : [ -23.0, 44.0, 1235.0, 581.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -48,7 +48,6 @@
 					"numoutlets" : 3,
 					"outlettype" : [ "", "int", "int" ],
 					"patching_rect" : [ 901.0, 375.0, 78.0, 20.0 ],
-					"presentation_rect" : [ 904.0, 375.0, 0.0, 0.0 ],
 					"text" : "change"
 				}
 
@@ -351,7 +350,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 645.0, 225.0, 70.0, 18.0 ],
+					"patching_rect" : [ 600.0, 225.0, 70.0, 18.0 ],
 					"text" : "editmode 1"
 				}
 
@@ -366,7 +365,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 794.5, 436.0, 87.0, 18.0 ],
-					"text" : "29.445"
+					"text" : "49.944"
 				}
 
 			}
@@ -407,8 +406,8 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 555.0, 225.0, 105.0, 18.0 ],
-					"text" : "read vid_raw.mov"
+					"patching_rect" : [ 555.0, 225.0, 35.0, 18.0 ],
+					"text" : "read"
 				}
 
 			}
@@ -448,8 +447,8 @@
 					"numinlets" : 1,
 					"numoutlets" : 2,
 					"outlettype" : [ "jit_matrix", "" ],
-					"patching_rect" : [ 495.0, 255.0, 331.0, 20.0 ],
-					"text" : "jit.qt.movie 768 540 @vol 0 @loop 0 @autostart 0 @interp 1"
+					"patching_rect" : [ 495.0, 255.0, 387.0, 20.0 ],
+					"text" : "jit.qt.movie 768 540 @adapt 1 @vol 0 @loop 0 @autostart 0 @interp 1"
 				}
 
 			}
@@ -731,8 +730,8 @@
 					"numinlets" : 1,
 					"numoutlets" : 2,
 					"outlettype" : [ "jit_matrix", "" ],
-					"patching_rect" : [ 90.0, 375.0, 347.0, 20.0 ],
-					"text" : "jit.gl.videoplane output @scale 1.4222 1. 1. @interp 1 @layer 0"
+					"patching_rect" : [ 90.0, 375.0, 237.0, 20.0 ],
+					"text" : "jit.gl.videoplane output @interp 1 @layer 0"
 				}
 
 			}
@@ -891,7 +890,7 @@
 					"destination" : [ "obj-1", 0 ],
 					"disabled" : 0,
 					"hidden" : 0,
-					"midpoints" : [ 654.5, 248.5, 504.5, 248.5 ],
+					"midpoints" : [ 609.5, 248.5, 504.5, 248.5 ],
 					"source" : [ "obj-13", 0 ]
 				}
 
@@ -1254,7 +1253,7 @@
 					"destination" : [ "obj-13", 0 ],
 					"disabled" : 0,
 					"hidden" : 0,
-					"midpoints" : [ 564.5, 219.5, 654.5, 219.5 ],
+					"midpoints" : [ 564.5, 219.5, 609.5, 219.5 ],
 					"source" : [ "obj-9", 0 ]
 				}
 

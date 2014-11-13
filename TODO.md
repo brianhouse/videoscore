@@ -1,0 +1,1 @@
+- make videosync generic for any video
