@@ -8,7 +8,7 @@ from braid import *
 # if cuefile is None:
 #     cuefile = os.path.abspath(input("Cuefile: "))
 # log.info("Reading %s" % cuefile)
-cuefile = "firstreal_5.json"
+cuefile = "cues/firstreal_5.json"
 
 # read in cues
 cues = []
