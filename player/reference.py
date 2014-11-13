@@ -9,11 +9,9 @@ CHANNEL = None
 if len(sys.argv) > 1:
     CHANNEL = int(sys.argv[1])  # 1=bass, 2=cello, 3=viola
 
-db = crashdb.load("data.json")
-note_rows = db['notes']
+db = crashdb.load("notes.json")
+notes = db['notes']
 db.close(False)
-notes = [nr[0] for nr in note_rows]
-note_infos = [nr[1] for nr in note_rows]
 
 ctx = animation.Context(1200, 600, background=(0.9, 0.9, 0.9, 1.), fullscreen=False, title="Forty-Eight to Sixteen", smooth=False)
 

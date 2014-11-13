@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import sys, json, os, random, subprocess, time
-from housepy import config, log, osc
+from housepy import config, log, osc, crashdb
 from braid import *
 
 # cuefile = sys.argv[1] if len(sys.argv) > 1 else None
@@ -9,6 +9,7 @@ from braid import *
 #     cuefile = os.path.abspath(input("Cuefile: "))
 # log.info("Reading %s" % cuefile)
 cuefile = "firstreal_4.json"
+db = crashdb.load("notes.json")
 
 # read in cues
 cues = []
@@ -19,8 +20,7 @@ if cuefile is not None:
     except Exception as e:
         log.info("Could not read cuefile: %s (%s)" % (cuefile, log.exc(e)))
         exit()
-
-print(cues)
+# print(cues)
 
 chord = G3, DOR
 v1 = Voice(1, chord=chord)
@@ -43,6 +43,7 @@ mapping = { '1': 1, '2': 1+interval,
             # 'j': 13, 'k': 13+interval,
             }
 
+notes = []
 for cue in cues:
     if cue['x'] > 0.75:
         v = v4
@@ -54,10 +55,15 @@ for cue in cues:
         v = v1
     if cue['q'] not in mapping:
         continue
-    v.play_at(cue['t'], mapping[cue['q']], ((1.0 - cue['y']) * 0.5) + 0.5)
+    t, step, velocity = cue['t'], mapping[cue['q']], ((1.0 - cue['y']) * 0.5) + 0.5
+    v.play_at(t, step, velocity)
+    root, scale = v.chord.value
+    pitch = root + scale[step]
+    notes.append((t, pitch, v.channel.value))
 
-
-
+db['notes'] = notes
+db.close()
+exit()
 
 # subprocess.call("open ../vid_raw.mov", shell=True)
 # time.sleep(0.6)
