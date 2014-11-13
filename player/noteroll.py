@@ -26,16 +26,29 @@ last_t = 0
 started = False
 
 names = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B']
-def get_note_name(n):
-    n -= 24
+
+treble_ledgers = {'D': 1, 'E': 2, 'F': 3, 'G': 4, 'A': 5, 'B': 6, 'C': 7, 'D+': 8, 'E+': 9, 'F+': 10, 'G+': 11}
+bass_ledgers =   {'F': 1, 'G': 2, 'A': 3, 'B': 4, 'C': 5, 'D': 6, 'E': 7, 'F+': 8, 'G+': 9, 'A+': 10, 'B+': 11}
+
+def get_treble_note_name(n):
+    p = n - 24
     i = n % 12
-    return names[i]
+    return "%s%s" % (names[i], '+' if n > 60 and n < 68 else '')        ## this is a wack way to do this
 
-ledgers = {'B': 4, 'C': 5, 'Db': 6, 'D': 6, 'Eb': 7, 'E': 7, 'F': 8, 'Gb': 9, 'G': 9, 'Ab': 10, 'A': 10, 'Bb': 11}
-def get_ledger(n):
-    name = get_note_name(n)
-    return ledgers[name]
+def get_bass_note_name(n):
+    p = n - 24
+    i = n % 12
+    return "%s%s" % (names[i], '+' if n > 64 and n < 72 else '')
 
+def get_treble_ledger(n):
+    name = get_treble_note_name(n)
+    print(name)
+    return treble_ledgers[name]
+
+def get_bass_ledger(n):
+    name = get_bass_note_name(n)
+    print(name)
+    return bass_ledgers[name]
 
 def message_handler(location, address, data):
     if address != "/sync":
@@ -89,10 +102,19 @@ def draw_frame(t):
         note = current_notes[i]        
         channel = int(note[2])
         note = int(note[1])
-        vertical = (get_ledger(note) * 0.0625) + 0.0625
 
         if CHANNEL is not None and channel != CHANNEL:
             continue
+
+        ## hack right here for the bentels ##
+        # if channel != 1:
+        #     continue
+
+        if channel == 1 or channel == 3:
+            vertical = (get_bass_ledger(note) * 0.0625) + 0.0625
+        else:
+            vertical = (get_treble_ledger(note) * 0.0625) + 0.0625
+
 
         # intensity = 1.0 - abs(hitpoint - t)
         # intensity /= 2.0
